@@ -1,5 +1,6 @@
+from distutils.command.upload import upload
 from flask import Flask
-from app.ext import db, migrate, login
+from app.ext import db, migrate, login, uploads
 from app.blueprints import home, aluno, livro, oficina, usuario, aula
 
 
@@ -11,6 +12,7 @@ def create_app():
     db.configure(app)
     migrate.configure(app)
     login.configure(app)
+    uploads.configure(app)
 
     # Blueprints
     home.configure(app)

@@ -1,6 +1,11 @@
-from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
+import os
+from config import UPLOAD_FOLDER
 
 def configure(app):
-    photos = UploadSet('photos', IMAGES)
-    configure_uploads(app, photos)
-    patch_request_class(app)
+    folder = f"{UPLOAD_FOLDER}/usuarios/fotos/"
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    
+    folder = f"{UPLOAD_FOLDER}/alunos/fotos/"
+    if not os.path.exists(folder):
+        os.makedirs(folder)
