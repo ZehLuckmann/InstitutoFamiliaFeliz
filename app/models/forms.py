@@ -18,9 +18,14 @@ class CadastroAlunoForm(FlaskForm):
     bairro = StringField("Bairro:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
     cidade = StringField("Cidade:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
     estado = StringField("Estado:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    fone = StringField("Fone:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
+    fone = StringField("Telefone:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
     cpf = StringField("Cpf:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    foto = FileField(validators=[])
+    foto = FileField(validators=[], render_kw={'class': CSS_CLASS_FIELD})
+
+    fone_pai = StringField("Telefone:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
+    fone_mae = StringField("Telefone:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
+    pai = StringField("Pai:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
+    mae = StringField("Mãe:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
 
     def insert_data(self, aluno):
         self.nome.data = aluno.nome
@@ -34,6 +39,11 @@ class CadastroAlunoForm(FlaskForm):
         self.estado.data = aluno.estado
         self.fone.data = aluno.fone
         self.cpf.data = aluno.cpf
+        self.fone_pai.data = aluno.fone_pai
+        self.fone_mae.data = aluno.fone_mae
+        self.pai.data = aluno.pai
+        self.mae.data = aluno.mae
+
 
 class CadastroLivroForm(FlaskForm):
     nome = StringField("Nome:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})

@@ -23,6 +23,11 @@ class Aluno(db.Model):
     fone = db.Column(db.String)
     cpf = db.Column(db.String)
 
+    pai = db.Column(db.String)
+    mae = db.Column(db.String)
+    fone_pai = db.Column(db.String)
+    fone_mae = db.Column(db.String)
+
     @property
     def foto_url(self):
         url = url_for('static', filename=f'uploads/alunos/fotos/{self.id}.png')
