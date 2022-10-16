@@ -1,0 +1,65 @@
+{% from "macros.html" import render_field %}
+
+{% extends "base.html" %}
+
+{% block links %}
+<link href="{{ url_for('static', filename='vendor/fullcalendar-3.10.0/fullcalendar.css') }}" rel='stylesheet' media="all" />
+
+<style type="text/css">
+.fc-event, .fc-event:hover {
+        color: #fff !important;
+        text-decoration: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row m-t-25">
+                <div class="h-100">
+                  <div class="au-card">
+                    <div id="calendar"></div>
+                  </div>
+                </div><!-- .col -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='vendor/fullcalendar-3.10.0/lib/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/fullcalendar-3.10.0/fullcalendar.js') }}"></script>
+    
+<script type="text/javascript">
+    $(function() {
+      // for now, there is something adding a click handler to 'a'
+      var tues = moment().day(2).hour(19);
+
+      var events = [
+        {% for oficina in oficinas %}
+            {% for eventos in oficina.datas %}
+                {
+                title: '{{eventos[0]}}',
+                start: '{{eventos[1]}}',
+                allDay: false,
+                url: '#'
+                },
+            {% endfor %}
+        {% endfor %}
+      ];
+
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay,listWeek'
+        },
+        events: events
+      });
+    });
+</script>
+
+{% endblock %}

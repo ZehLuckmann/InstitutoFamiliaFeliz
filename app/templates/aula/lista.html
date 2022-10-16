@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="title-5 m-b-35">Aulas</h3>
+                    <div class="table-data__tool">
+                        <div class="table-data__tool-left">
+                            <input class="form-control" id="table_filter" type="text" placeholder="Search..">
+                        </div>
+                        <div class="table-data__tool-right">
+                            <a href="{{ url_for('aula.cadastrar') }}">
+                                <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                <i class="fas fa-plus"></i>Nova Aula</button>
+                            </a>
+                            <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
+                                <select class="js-select2" name="type">
+                                    <option selected="selected">Export</option>
+                                    <option value="">Option 1</option>
+                                    <option value="">Option 2</option>
+                                </select>
+                                <div class="dropDownSelect2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive table-responsive-data2">
+                        <table class="table table-data2">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Oficina</th>
+                                    <th>Data</th>
+                                    <th>Alunos</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                                {% for aula in aulas %}
+                                <tr class="tr-shadow">
+                                    <td>{{ aula.id }}</td>
+                                    <td>{{ aula.oficina.nome }}</td>
+                                    <td class="desc">{{ aula.data.strftime("%d/%m/%Y") }}</td>
+                                    <td>{{ aula.oficina.total_alunos }}</td>
+
+                                    <td>
+                                        <div class="table-data-feature">
+                                            <a href="/aula/frequencia/{{ aula.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Frequencia"><i class="fas fa-list"></i></button>
+                                            </a>
+                                            <a href="/aula/atualizar/{{ aula.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></button>
+                                            </a>
+                                            <a href="/aula/excluir/{{ aula.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></button>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="spacer"></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+      $("#table_filter").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+</script>
+{% endblock %}

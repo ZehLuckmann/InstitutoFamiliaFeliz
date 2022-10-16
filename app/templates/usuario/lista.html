@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="title-5 m-b-35">Usuarios</h3>
+                    <div class="table-data__tool">
+                        <div class="table-data__tool-left">
+                            <input class="form-control" id="table_filter" type="text" placeholder="Search..">
+                        </div>
+                        <div class="table-data__tool-right">
+                            <a href="{{ url_for('usuario.cadastrar') }}">
+                                <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                <i class="fas fa-plus"></i>Novo Usuario</button>
+                            </a>
+                            <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
+                                <select class="js-select2" name="type">
+                                    <option selected="selected">Export</option>
+                                    <option value="">Option 1</option>
+                                    <option value="">Option 2</option>
+                                </select>
+                                <div class="dropDownSelect2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive table-responsive-data2">
+                        <table class="table table-data2">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Login</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                                {% for usuario in usuarios %}
+                                <tr class="tr-shadow">
+                                    <td>{{ usuario.id }}</td>
+                                    <td class="desc">{{ usuario.nome }}</td>
+                                    <td>{{ usuario.login }}</td>
+                                    <td>
+                                        <div class="table-data-feature">
+                                            <a href="/usuario/atualizar/{{ usuario.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></button>
+                                            </a>
+                                            <a href="/usuario/excluir/{{ usuario.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></button>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="spacer"></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+      $("#table_filter").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+</script>
+{% endblock %}

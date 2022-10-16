@@ -1,0 +1,80 @@
+{% from "macros.html" import render_field %}
+
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <section class="container-center">
+                    <form action="{{ action }}" method="post" enctype = "multipart/form-data" novalidate="novalidate">
+                    {{ form.csrf_token }}
+                        <div class="card">
+                            <div class="card-header">
+                                <h1>Cadastrar Aluno</h1>
+                            </div>
+                            <div class="card-body card-block">
+                                <div class="row form-group">
+                                    <div class="col-6">
+                                        {{ render_field(form.nome, type='text') }}
+                                    </div>
+                                    <div class="col-6">
+                                        {{ render_field(form.sobrenome, type='text') }}
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-6">
+                                        {{ render_field(form.cpf, type='text') }}
+                                    </div>
+                                    <div class="col-6">
+                                        {{ render_field(form.fone, type='text') }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <div class="col-9">
+                                        {{ render_field(form.escola, type='text') }}
+                                    </div>
+                                    <div class="col-3">
+                                        {{ render_field(form.ano, type='text') }}
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-10">
+                                        {{ render_field(form.rua, type='text') }}
+                                    </div>
+                                    <div class="col-2">
+                                        {{ render_field(form.numero, type='text') }}
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-4">
+                                        {{ render_field(form.bairro, type='text') }}
+                                    </div>
+                                    <div class="col-4">
+                                        {{ render_field(form.cidade, type='text') }}
+                                    </div>
+                                    <div class="col-4">
+                                        {{ render_field(form.estado, type='text') }}
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-4">
+                                        {{ render_field(form.foto, type='file') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <input type="submit" class="btn btn-success btn-sm btn-submit" value="Salvar"/> 
+                                <a href="{{ url_for('aluno.lista') }}" class="btn btn-danger btn-sm">Cancelar</a>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
