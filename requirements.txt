@@ -29,7 +29,7 @@ jsonconfig-tool
 Flask-Login
 Flask-Migrate
 Flask-SQLAlchemy
-Flask-User
+Flask-Migrate
 Flask-WTF
 python-box
 python-editor
