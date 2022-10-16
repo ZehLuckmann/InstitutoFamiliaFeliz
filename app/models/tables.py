@@ -4,6 +4,8 @@ from datetime import datetime
 from app.models.utils import daterange, DIAS_SEMANA
 from flask_login import UserMixin
 from flask import url_for
+from os.path import exists
+from config import UPLOAD_FOLDER
 
 class Aluno(db.Model):
     __tablename__ = "aluno"
@@ -23,7 +25,10 @@ class Aluno(db.Model):
 
     @property
     def foto_url(self):
-        return url_for('static', filename=f'uploads/alunos/fotos/{self.id}.png')
+        url = url_for('static', filename=f'uploads/alunos/fotos/{self.id}.png')
+        if not exists(f"{UPLOAD_FOLDER}/alunos/fotos/{str(self.id)}.png"):
+            url = url_for('static', filename=f'images/icon/default-avatar.png')
+        return url
 
 #Biblioteca
 class Livro(db.Model):
@@ -123,4 +128,7 @@ class Usuario(UserMixin, db.Model):
 
     @property
     def foto_url(self):
-        return url_for('static', filename=f'uploads/usuarios/fotos/{self.id}.png')
+        url = url_for('static', filename=f'uploads/usuarios/fotos/{self.id}.png')
+        if not exists(f"{UPLOAD_FOLDER}/usuarios/fotos/{str(self.id)}.png"):
+            url = url_for('static', filename=f'images/icon/default-avatar.png')
+        return url

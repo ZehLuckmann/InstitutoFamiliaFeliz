@@ -23,7 +23,8 @@ def cadastrar():
         db.session.add(p)
         db.session.commit()
         db.session.refresh(p)
-        form.foto.data.save(f"{UPLOAD_FOLDER}/usuarios/fotos/{str(p.id)}.png")
+        if form.foto.data:
+            form.foto.data.save(f"{UPLOAD_FOLDER}/usuarios/fotos/{str(p.id)}.png")
         return redirect(url_for("usuario.lista"))
     return render_template("usuario/cadastro.html", form=form, action=url_for('usuario.cadastrar'))
 
@@ -51,7 +52,8 @@ def atualizar(id):
     if form.validate_on_submit():
         form.populate_obj(usuario)
         db.session.commit()
-        form.foto.data.save(f"{UPLOAD_FOLDER}/usuarios/fotos/{str(usuario.id)}.png")
+        if form.foto.data:
+            form.foto.data.save(f"{UPLOAD_FOLDER}/usuarios/fotos/{str(usuario.id)}.png")
         return redirect(url_for("usuario.lista"))
 
     form = CadastroUsuarioForm()

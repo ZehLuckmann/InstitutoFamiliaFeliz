@@ -22,8 +22,10 @@ def cadastrar():
         db.session.add(aluno)
         db.session.commit()
         db.session.refresh(aluno)
-        form.foto.data.save(f"{UPLOAD_FOLDER}/alunos/fotos/{str(aluno.id)}.png")
+        if form.foto.data:
+            form.foto.data.save(f"{UPLOAD_FOLDER}/alunos/fotos/{str(aluno.id)}.png")
         return redirect(url_for("aluno.lista")) 
+
     return render_template("aluno/cadastro.html", form=form, action=url_for('aluno.cadastrar'))
 
 
@@ -34,6 +36,7 @@ def lista():
         return redirect(url_for("usuario.acesso_negado"))
 
     alunos = Aluno.query.all()
+
     return render_template("aluno/lista.html", alunos=alunos)
 
 
@@ -48,13 +51,14 @@ def atualizar(id):
 
     if form.validate_on_submit():
         form.populate_obj(aluno)
-        print(UPLOAD_FOLDER)
-        form.foto.data.save(f"{UPLOAD_FOLDER}/alunos/fotos/{str(aluno.id)}.png")
+        if form.foto.data:
+            form.foto.data.save(f"{UPLOAD_FOLDER}/alunos/fotos/{str(aluno.id)}.png")
         db.session.commit()
         return redirect(url_for("aluno.lista"))
 
     form = CadastroAlunoForm()
     form.insert_data(aluno)
+
     return render_template("aluno/cadastro.html", form=form)
 
 
@@ -68,6 +72,7 @@ def excluir(id):
 
     db.session.delete(aluno)
     db.session.commit()
+
     return redirect(url_for("aluno.lista"))
 
 def configure(app):
