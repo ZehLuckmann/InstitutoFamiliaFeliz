@@ -14,4 +14,4 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite')
 
 SQLALCHEMY_TRACK_MODIFICATIONS = config('SQLALCHEMY_TRACK_MODIFICATIONS', True, cast=bool)
 
-UPLOAD_FOLDER = os.path.join(os.path.abspath('.'), "app\\static\\uploads") 
+UPLOAD_FOLDER = os.path.join(os.path.abspath('.'), "app/static/uploads") 
