@@ -8,7 +8,7 @@ BASE_DIR = os.path.abspath('.')
 
 DEBUG = True#config('DEBUG', cast=bool)
 
-SECRET_KEY = ''.join(random.choice(string.ascii_letters) for i in range(42))
+SECRET_KEY = 'SENHABANCO'
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite')
 
