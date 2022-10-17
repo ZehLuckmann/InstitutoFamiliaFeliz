@@ -14,8 +14,12 @@ DIAS_SEMANA = [
     ("5", "Sábado"), 
     ("6", "Domingo")]
 
+GENERO = [
+    ("masc", "Masculino"),
+    ("fem", "Feminino"), 
+    ("out", "Outro"), ]
+
 ROLES = [
-    ("admin", "Administrador"),
     ("coordenador", "Coordenador"), 
     ("responsavel", "Responsavel"), ]
 

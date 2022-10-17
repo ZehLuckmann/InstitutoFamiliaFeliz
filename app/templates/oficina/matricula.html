@@ -9,7 +9,12 @@
                 <div class="col-md-12"> 
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
-                            <input class="form-control" id="table_filter" type="text" placeholder="Search..">  
+                            <div class="input-group">
+                                <input type="text" id="table_filter" name="table_filter" class="form-control" placeholder="Pesquisar..">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                            </div>  
                         </div>
                         <div class="table-data__tool-right">
                             
@@ -19,7 +24,7 @@
                         <table class="table table-data2">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Foto</th>
                                     <th>Nome</th>
                                     <th>Sobrenome</th>
                                     <th></th>
@@ -28,7 +33,7 @@
                             <tbody id="myTable">
                                 {% for aluno in alunos %}
                                 <tr class="tr-shadow">
-                                    <td>{{ aluno.id }}</td>
+                                    <td><img class="rounded-circle mx-auto d-block" src="{{aluno.foto_url}}" alt="{{ aluno.nome }}" width="60"></td>
                                     <td class="desc">{{ aluno.nome }}</td>
                                     <td class="desc">{{ aluno.sobrenome }}</td>
                                     <td>

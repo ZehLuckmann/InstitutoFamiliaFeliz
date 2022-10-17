@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from xmlrpc.client import Boolean
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from app.models.tables import Aula, Oficina, Frequencia
 from app.models.forms import CadastroAulaForm
 from app.ext.db import db
@@ -10,7 +11,7 @@ route_prefix = "/aula"
 @bp_app.route(route_prefix+"/cadastrar/", methods=["GET", "POST"])
 @login_required
 def cadastrar():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroAulaForm()
@@ -18,8 +19,7 @@ def cadastrar():
     
     if form.validate_on_submit():
         aula = Aula()
-        aula.data = form.data.data
-        aula.oficina_id = form.oficina.data
+        aula = form.populate_obj(aula)
         db.session.add(aula)
         db.session.commit()
         db.session.refresh(aula)
@@ -43,7 +43,7 @@ def cadastrar():
 @bp_app.route(route_prefix+"/lista/<int:oficinaid>")
 @login_required
 def lista(oficinaid=-1):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     aulas = Aula.query.all()
@@ -53,7 +53,7 @@ def lista(oficinaid=-1):
 @bp_app.route(route_prefix+"/atualizar/<int:id>", methods=["GET", "POST"])
 @login_required
 def atualizar(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroAulaForm()
@@ -62,18 +62,18 @@ def atualizar(id):
     aula = Aula.query.filter_by(id=id).first()
 
     if form.validate_on_submit():
-        aula.data = form.data.data
-        aula.oficina_id = form.oficina.data
+        aula = form.populate_obj(aula)
         db.session.commit()
         return redirect(url_for("aula.lista"))
 
+    form.insert_data(aula)
     return render_template("aula/cadastro.html", form=form)
 
 
 @bp_app.route(route_prefix+"/excluir/<int:id>")
 @login_required
 def excluir(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     aula = Aula.query.filter_by(id=id).first()
@@ -85,11 +85,25 @@ def excluir(id):
 @bp_app.route(route_prefix+"/frequencia/<int:aulaid>")
 @login_required
 def frequencia(aulaid):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     frequencias = Frequencia.query.filter_by(aula_id=aulaid).all()
     return render_template("aula/frequencia.html", frequencias=frequencias)
+
+@bp_app.route(route_prefix+"/frequencia")
+#@login_required
+def presenca():
+    #if not current_user.permissao("coordenador"):
+    #    return redirect(url_for("usuario.acesso_negado"))
+    freq_id = request.args.get('freq_id', -1, type=int)
+    presenca = request.args.get('presenca', "true")=="true"
+    frequencia = Frequencia.query.filter_by(id=freq_id).first()
+    if frequencia:
+        frequencia.presenca = presenca
+        db.session.commit()
+
+    return jsonify(result=[freq_id, presenca] )
 
 def configure(app):
     app.register_blueprint(bp_app)

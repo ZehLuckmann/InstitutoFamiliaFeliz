@@ -10,13 +10,20 @@
                     <h3 class="title-5 m-b-35">Oficinas</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
-                            <input class="form-control" id="table_filter" type="text" placeholder="Search..">
+                            <div class="input-group">
+                                <input type="text" id="table_filter" name="table_filter" class="form-control" placeholder="Pesquisar..">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                            </div>
                         </div>
                         <div class="table-data__tool-right">
+                            {% if current_user.permissao("coordenador")%}
                             <a href="{{ url_for('oficina.cadastrar') }}">
                                 <button class="au-btn au-btn-icon au-btn--green au-btn--small">
                                 <i class="fas fa-plus"></i>Nova Oficina</button>
                             </a>
+                            {% endif %}
                             <a href="{{ url_for('oficina.calendario') }}">
                                 <button class="au-btn au-btn-icon au-btn--blue au-btn--small">
                                 <i class="fas fa-calendar"></i>Calendário</button>
@@ -57,18 +64,23 @@
                                     <td>{{ oficina.total_alunos }}</td>
                                     <td>
                                         <div class="table-data-feature">
+                                            <a href="/oficina/boletim/{{ oficina.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Boletim"><i class="fas fa-certificate"></i></button>
+                                            </a>
                                             <a href="/aula/lista/{{ oficina.id }}">
                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Aulas"><i class="fas fa-graduation-cap"></i></button>
                                             </a>
                                             <a href="/oficina/matricula/{{ oficina.id }}">
                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Matricula"><i class="fas fa-users"></i></button>
                                             </a>
+                                            {% if current_user.permissao("coordenador")%}
                                             <a href="/oficina/atualizar/{{ oficina.id }}">
                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></button>
                                             </a>
                                             <a href="/oficina/excluir/{{ oficina.id }}">
                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></button>
                                             </a>
+                                            {% endif %}
                                         </div>
                                     </td>
                                 </tr>

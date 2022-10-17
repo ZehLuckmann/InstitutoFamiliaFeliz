@@ -1,11 +1,13 @@
 from email.policy import default
 from app.ext.db import db
 from datetime import datetime
-from app.models.utils import daterange, DIAS_SEMANA
+from datetime import date
+from app.models.utils import daterange, DIAS_SEMANA, GENERO
 from flask_login import UserMixin
 from flask import url_for
 from os.path import exists
 from config import UPLOAD_FOLDER
+from sqlalchemy.orm.session import object_session 
 
 class Aluno(db.Model):
     __tablename__ = "aluno"
@@ -22,11 +24,26 @@ class Aluno(db.Model):
     estado = db.Column(db.String)
     fone = db.Column(db.String)
     cpf = db.Column(db.String)
-
+    genero = db.Column(db.String)
     pai = db.Column(db.String)
     mae = db.Column(db.String)
     fone_pai = db.Column(db.String)
     fone_mae = db.Column(db.String)
+
+     
+    def calcula_presenca(self, oficina_id):
+        presenca = len([freq for freq in self.frequencia if (freq.aula.oficina.id == oficina_id) & (freq.presenca == True)])
+        return presenca
+
+    def calcula_ausencia(self, oficina_id):
+        ausencia = len([freq for freq in self.frequencia if (freq.aula.oficina.id == oficina_id) & (freq.presenca == False)])
+        return ausencia
+
+    def calcula_percentual_presenca(self, oficina_id):
+        presenca = len([freq for freq in self.frequencia if (freq.aula.oficina.id == oficina_id) & (freq.presenca == True)])
+        total = len([freq for freq in self.frequencia if (freq.aula.oficina.id == oficina_id)])
+
+        return (presenca*100)/total if total > 0 else 0.0
 
     @property
     def foto_url(self):
@@ -34,6 +51,11 @@ class Aluno(db.Model):
         if not exists(f"{UPLOAD_FOLDER}/alunos/fotos/{str(self.id)}.png"):
             url = url_for('static', filename=f'images/icon/default-avatar.png')
         return url
+
+    @property
+    def genero_str(self):
+        r = [item for item in GENERO if self.genero in item]
+        return r[0][1]
 
 #Biblioteca
 class Livro(db.Model):
@@ -80,6 +102,8 @@ class Oficina(db.Model):
     dia_semana = db.Column(db.String)
     horario = db.Column(db.Time)
     
+    responsavel_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+
     aula = db.relationship('Aula', backref='oficina')
     alunos = db.relationship('Aluno', secondary=matricula, lazy='subquery', backref=db.backref('oficinas', lazy=True))
 
@@ -92,11 +116,12 @@ class Oficina(db.Model):
     def total_alunos(self):
         return len(self.alunos)
 
+    
     @property
-    def datas(self):
+    def datas_futuras(self):
         datas = []
-        for single_date in daterange(self.inicio, self.fim):
-            if str(single_date.weekday()) == self.dia_semana:
+        for single_date in daterange(date.today(), self.fim):
+           if str(single_date.weekday()) == self.dia_semana:
                 single_date = datetime.combine(single_date, self.horario)
                 datas.append([self.nome, single_date.isoformat()])
 
@@ -107,6 +132,11 @@ class Aula(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     oficina_id = db.Column(db.Integer, db.ForeignKey('oficina.id'))
     data = db.Column(db.Date)
+    horario = db.Column(db.Time)
+
+    @property
+    def data_iso(self):
+        return datetime.combine(self.data, self.horario).isoformat()
 
 class Frequencia(db.Model):
     __tablename__ = "frequencia"
@@ -130,6 +160,7 @@ class Usuario(UserMixin, db.Model):
     senha = db.Column(db.String(100))
     nome = db.Column(db.String(1000))
     role = db.Column(db.String)
+    oficinas = db.relationship('Oficina', backref='responsavel')
 
     @property
     def foto_url(self):
@@ -137,3 +168,12 @@ class Usuario(UserMixin, db.Model):
         if not exists(f"{UPLOAD_FOLDER}/usuarios/fotos/{str(self.id)}.png"):
             url = url_for('static', filename=f'images/icon/default-avatar.png')
         return url
+    
+    def permissao(self, role):
+        if role == "admin": 
+            return self.role in ["admin"]
+        elif role == "coordenador":
+            return self.role in ["admin", "coordenador"]
+        elif role == "responsavel":
+            return self.role in ["admin", "coordenador", "responsavel"]
+        return False

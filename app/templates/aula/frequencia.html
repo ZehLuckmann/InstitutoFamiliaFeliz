@@ -10,7 +10,12 @@
                     <h3 class="title-5 m-b-35">Frequencia</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
-                            <input class="form-control" id="table_filter" type="text" placeholder="Search..">
+                            <div class="input-group">
+                                <input type="text" id="table_filter" name="table_filter" class="form-control" placeholder="Pesquisar..">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                            </div>
                         </div>
                         <div class="table-data__tool-right">
                             <!--<a href="{{ url_for('aula.cadastrar') }}">
@@ -48,7 +53,7 @@
                                     <td>{{ frequencia.aluno.nome }}</td>
                                     <td>
                                         <label class="switch switch-3d switch-primary mr-3">
-                                            <input type="checkbox" class="switch-input" {{ "checked" if frequencia.presenca else "" }}>
+                                            <input onChange="alterar_frequencia({{frequencia.id}});" id="presenca_{{frequencia.id}}" type="checkbox" class="switch-input" {{ "checked" if frequencia.presenca else "" }}>
                                             <span class="switch-label"></span>
                                             <span class="switch-handle"></span>
                                         </label>
@@ -76,5 +81,18 @@
         });
       });
     });
+
+    $SCRIPT_ROOT = {{ request.script_root|tojson }};
+
+    function alterar_frequencia(freq_id) {
+            $.getJSON($SCRIPT_ROOT + '/aula/frequencia', {
+                freq_id: freq_id,
+                presenca: document.getElementById('presenca_'+freq_id).checked,
+            }, function(data) {
+                console.log(data.result);
+            });
+            return false;
+    }
 </script>
+
 {% endblock %}

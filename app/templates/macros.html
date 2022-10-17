@@ -2,10 +2,15 @@
     {{ field.label }}
     {{ field(**kwargs)|safe }}
     {% if field.errors %}
-    <ul>
-        {% for error in field.errors %}
-            <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
+    <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
+       <ul>
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     {% endif %}
 {% endmacro %}

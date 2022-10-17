@@ -12,7 +12,7 @@ route_prefix="/aluno"
 @bp_app.route(route_prefix+"/cadastrar", methods=["GET", "POST"])
 @login_required
 def cadastrar():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroAlunoForm()
@@ -32,7 +32,7 @@ def cadastrar():
 @bp_app.route(route_prefix+"/lista")
 @login_required
 def lista():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     alunos = Aluno.query.all()
@@ -43,7 +43,7 @@ def lista():
 @bp_app.route(route_prefix+"/atualizar/<int:id>", methods=["GET", "POST"])
 @login_required
 def atualizar(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroAlunoForm()
@@ -55,8 +55,7 @@ def atualizar(id):
             form.foto.data.save(f"{UPLOAD_FOLDER}/alunos/fotos/{str(aluno.id)}.png")
         db.session.commit()
         return redirect(url_for("aluno.lista"))
-
-    form = CadastroAlunoForm()
+        
     form.insert_data(aluno)
 
     return render_template("aluno/cadastro.html", form=form)
@@ -65,7 +64,7 @@ def atualizar(id):
 @bp_app.route(route_prefix+"/excluir/<int:id>")
 @login_required
 def excluir(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
         
     aluno = Aluno.query.filter_by(id=id).first()
@@ -74,6 +73,16 @@ def excluir(id):
     db.session.commit()
 
     return redirect(url_for("aluno.lista"))
+
+@bp_app.route(route_prefix+"/boletim/<int:id>")
+@login_required
+def boletim(id):
+    if not current_user.permissao("coordenador"):
+        return redirect(url_for("usuario.acesso_negado"))
+
+    aluno = Aluno.query.filter_by(id=id).first()
+    oficinas = aluno.oficinas
+    return render_template("aluno/boletim.html", aluno=aluno)
 
 def configure(app):
     app.register_blueprint(bp_app)

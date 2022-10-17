@@ -40,7 +40,17 @@
 
       var events = [
         {% for oficina in oficinas %}
-            {% for eventos in oficina.datas %}
+            {% for aula in oficina.aula %}
+                {
+                title: '{{oficina.nome}}',
+                start: '{{aula.data_iso}}',
+                allDay: false,
+                url: '#',
+                backgroundColor: "#44dd33"
+                },
+            {% endfor %}
+
+            {% for eventos in oficina.datas_futuras %}
                 {
                 title: '{{eventos[0]}}',
                 start: '{{eventos[1]}}',

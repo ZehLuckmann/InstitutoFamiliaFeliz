@@ -21,9 +21,15 @@
                                         {{ render_field(form.data, type='text') }}
                                     </div>
                                     <div class="col-6">
+                                        {{ render_field(form.horario, type='text') }}
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-12">
                                         {{ render_field(form.oficina, type='text') }}
                                     </div>
                                 </div>
+                               
                             </div>
                             <div class="card-footer">
                                 <input type="submit" class="btn btn-success btn-sm btn-submit" value="Salvar"/> 

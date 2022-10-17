@@ -3311,6 +3311,7 @@ section {
     padding: 40px;
     padding-top: 25px;
     padding-bottom: 29px;
+    min-height: 90%;
 }
 
 .au-card--no-shadow {
@@ -4106,6 +4107,7 @@ section {
 .chart-percent-card {
     margin-bottom: 60px;
     padding-top: 47px;
+    min-height: 90%;
 }
 
 .chart-percent-card .chart-note {

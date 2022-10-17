@@ -236,7 +236,7 @@
 .fa-signal:before {
   content: "\f012";
 }
-.fa-gear:before,
+.fa-rocket:before,
 .fa-cog:before {
   content: "\f013";
 }
@@ -566,7 +566,7 @@
 .fa-key:before {
   content: "\f084";
 }
-.fa-gears:before,
+.fa-rockets:before,
 .fa-cogs:before {
   content: "\f085";
 }

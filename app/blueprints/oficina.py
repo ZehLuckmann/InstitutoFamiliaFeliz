@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from app.models.tables import Oficina, Aluno
+from app.models.tables import Oficina, Aluno, Usuario
 from app.models.forms import CadastroOficinaForm
 from app.ext.db import db
 from flask_login import login_required, current_user
@@ -10,14 +10,15 @@ route_prefix = "/oficina"
 @bp_app.route(route_prefix+"/cadastrar", methods=["GET", "POST"])
 @login_required
 def cadastrar():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroOficinaForm()
+    form.responsavel.choices = [(usuario.id, usuario.nome) for usuario in Usuario.query.all()]
     if form.validate_on_submit():
-        p = Oficina()
-        form.populate_obj(p)
-        db.session.add(p)
+        oficina = Oficina()
+        oficina = form.populate_obj(oficina)
+        db.session.add(oficina)
         db.session.commit()
         return redirect(url_for("oficina.lista"))
 
@@ -27,17 +28,21 @@ def cadastrar():
 @bp_app.route(route_prefix+"/lista")
 @login_required
 def lista():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
-    oficinas = Oficina.query.all()
+    if current_user.role == "responsavel":
+        oficinas = Oficina.query.filter_by(responsavel_id=current_user.id).all()
+    else:
+        oficinas = Oficina.query.all()
+
     return render_template("oficina/lista.html", oficinas=oficinas)
 
 
 @bp_app.route(route_prefix+"/calendario")
 @login_required
 def calendario():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     oficinas = Oficina.query.all()
@@ -47,19 +52,18 @@ def calendario():
 @bp_app.route(route_prefix+"/atualizar/<int:id>", methods=["GET", "POST"])
 @login_required
 def atualizar(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroOficinaForm()
     oficina = Oficina.query.filter_by(id=id).first()
+    form.responsavel.choices = [(usuario.id, usuario.nome) for usuario in Usuario.query.all()]
 
     if form.validate_on_submit():
-        form.populate_obj(oficina)
+        oficina = form.populate_obj(oficina)
         db.session.commit()
         return redirect(url_for("oficina.lista"))
 
-
-    form = CadastroOficinaForm()
     form.insert_data(oficina)
 
     return render_template("oficina/cadastro.html", form=form)
@@ -68,7 +72,7 @@ def atualizar(id):
 @bp_app.route(route_prefix+"/excluir/<int:id>")
 @login_required
 def excluir(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     oficina = Oficina.query.filter_by(id=id).first()
@@ -82,7 +86,7 @@ def excluir(id):
 @bp_app.route(route_prefix+"/matricula/<int:oficinaid>")
 @login_required
 def matricula(oficinaid):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     oficina = Oficina.query.filter_by(id=oficinaid).first()
@@ -93,7 +97,7 @@ def matricula(oficinaid):
 @bp_app.route(route_prefix+"/matricular/<int:oficinaid>/<int:alunoid>")
 @login_required
 def matricular(oficinaid, alunoid):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     oficina = Oficina.query.filter_by(id=oficinaid).first()
@@ -108,7 +112,7 @@ def matricular(oficinaid, alunoid):
 @bp_app.route(route_prefix+"/desmatricular/<int:oficinaid>/<int:alunoid>")
 @login_required
 def desmatricular(oficinaid, alunoid):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
     oficina = Oficina.query.filter_by(id=oficinaid).first()
@@ -118,6 +122,16 @@ def desmatricular(oficinaid, alunoid):
     db.session.commit()
 
     return redirect(url_for("oficina.matricula", oficinaid=oficinaid))
+
+@bp_app.route(route_prefix+"/boletim/<int:id>")
+@login_required
+def boletim(id):
+    if not current_user.permissao("responsavel"):
+        return redirect(url_for("usuario.acesso_negado"))
+
+    oficina = Oficina.query.filter_by(id=id).first()
+
+    return render_template("oficina/boletim.html", oficina=oficina)
 
 def configure(app):
     app.register_blueprint(bp_app)

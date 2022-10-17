@@ -12,7 +12,7 @@ route_prefix = "/usuario"
 @bp_app.route(route_prefix+"/cadastrar", methods=["GET", "POST"])
 @login_required
 def cadastrar():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroUsuarioForm()
@@ -32,7 +32,7 @@ def cadastrar():
 @bp_app.route(route_prefix+"/lista")
 @login_required
 def lista():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     usuarios = Usuario.query.all()
@@ -42,21 +42,19 @@ def lista():
 @bp_app.route(route_prefix+"/atualizar/<int:id>", methods=["GET", "POST"])
 @login_required
 def atualizar(id):
-    print(current_user.id, id)
     if (current_user.role not in ["admin"]) & (current_user.id != id):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroUsuarioForm()
     usuario = Usuario.query.filter_by(id=id).first()
-
     if form.validate_on_submit():
         form.populate_obj(usuario)
+        usuario.senha = generate_password_hash(usuario.senha)
         db.session.commit()
         if form.foto.data:
             form.foto.data.save(f"{UPLOAD_FOLDER}/usuarios/fotos/{str(usuario.id)}.png")
         return redirect(url_for("usuario.lista"))
 
-    form = CadastroUsuarioForm()
     form.insert_data(usuario)
     return render_template("usuario/cadastro.html", form=form)
 
@@ -64,7 +62,7 @@ def atualizar(id):
 @bp_app.route(route_prefix+"/excluir/<int:id>")
 @login_required
 def excluir(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     usuario = Usuario.query.filter_by(id=id).first()

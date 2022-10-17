@@ -10,7 +10,7 @@ route_prefix = "/livro"
 @bp_app.route(route_prefix+"/cadastrar", methods=["GET", "POST"])
 @login_required
 def cadastrar():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroLivroForm()
@@ -27,7 +27,7 @@ def cadastrar():
 @bp_app.route(route_prefix+"/lista")
 @login_required
 def lista():
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     livros = Livro.query.all()
@@ -37,7 +37,7 @@ def lista():
 @bp_app.route(route_prefix+"/atualizar/<int:id>", methods=["GET", "POST"])
 @login_required
 def atualizar(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroLivroForm()
@@ -55,7 +55,7 @@ def atualizar(id):
 @bp_app.route(route_prefix+"/excluir/<int:id>")
 @login_required
 def excluir(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     livro = Livro.query.filter_by(id=id).first()
@@ -65,12 +65,14 @@ def excluir(id):
     return redirect(url_for("livro.lista"))
 
 @bp_app.route(route_prefix+"/emprestimo", methods=["GET", "POST"])
+@bp_app.route(route_prefix+"/emprestimo/<int:livroid>", methods=["GET", "POST"])
 @login_required
-def emprestimo():
-    if current_user.role not in ["admin"]:
+def emprestimo(livroid=-1):
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroEmprestimoLivroForm()
+    
     form.aluno.choices = [(aluno.id, aluno.nome) for aluno in Aluno.query.all()]
     form.livro.choices = [(livro.id, livro.nome) for livro in Livro.query.all()]
 
@@ -83,13 +85,15 @@ def emprestimo():
         db.session.add(p)
         db.session.commit()
         return redirect(url_for("livro.lista"))
-
+    
+    
+    form.livro.data = livroid
     return render_template("livro/emprestimo.html", form=form, action=url_for('livro.emprestimo'))
 
 @bp_app.route(route_prefix+"/devolucao/<int:id>", methods=["GET", "POST"])
 @login_required
 def devolucao(id):
-    if current_user.role not in ["admin"]:
+    if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroEmprestimoLivroForm()

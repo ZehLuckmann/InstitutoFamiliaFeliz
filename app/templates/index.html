@@ -5,101 +5,66 @@
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
-            <div class="row m-t-25">
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c1">
-                        <div class="overview__inner">
-                            <div class="overview-box clearfix">
+            <!-- STATISTIC-->
+            <section class="statistic statistic2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--green">
+                                <h2 class="number">{{ form.total_alunos }} Alunos</h2>
+                                <span class="desc">ativos</span>
                                 <div class="icon">
                                     <i class="fas fa-users"></i>
                                 </div>
-                                <div class="text">
-                                    <h2>{{form.total_alunos}} alunos</h2>
-                                    <span>ativos</span>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c2">
-                        <div class="overview__inner">
-                            <div class="overview-box clearfix">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--orange">
+                                <h2 class="number">{{ form.total_oficinas }} Oficinas</h2>
+                                <span class="desc">ativas</span>
                                 <div class="icon">
                                     <i class="fas fa-rocket"></i>
                                 </div>
-                                <div class="text">
-                                    <h2>{{form.total_oficinas}} oficinas</h2>
-                                    <span>ativas</span>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c3">
-                        <div class="overview__inner">
-                            <div class="overview-box clearfix">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--blue">
+                                <h2 class="number">{{ form.total_aulas }} Aulas</h2>
+                                <span class="desc">neste semestre</span>
                                 <div class="icon">
                                     <i class="fas fa-calendar"></i>
                                 </div>
-                                <div class="text">
-                                    <h2>{{form.total_aulas}} aulas</h2>
-                                    <span>neste semestre</span>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c4">
-                        <div class="overview__inner">
-                            <div class="overview-box clearfix">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--red">
+                                <h2 class="number">$1</h2>
+                                <span class="desc">doados</span>
                                 <div class="icon">
                                     <i class="zmdi zmdi-money"></i>
                                 </div>
-                                <div class="text">
-                                    <h2>R$1</h2>
-                                    <span>doados</span>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+            
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="au-card recent-report">
-                        <div class="au-card-inner">
-                            <h3 class="title-2">recent reports</h3>
-                            <div class="chart-info">
-                                <div class="chart-info__left">
-                                    <div class="chart-note">
-                                        <span class="dot dot--blue"></span>
-                                        <span>products</span>
-                                    </div>
-                                    <div class="chart-note mr-0">
-                                        <span class="dot dot--green"></span>
-                                        <span>services</span>
-                                    </div>
-                                </div>
-                                <div class="chart-info__right">
-                                    <div class="chart-statis">
-                                        <span class="index incre">
-                                            <i class="zmdi zmdi-long-arrow-up"></i>25%</span>
-                                        <span class="label">products</span>
-                                    </div>
-                                    <div class="chart-statis mr-0">
-                                        <span class="index decre">
-                                            <i class="zmdi zmdi-long-arrow-down"></i>10%</span>
-                                        <span class="label">services</span>
-                                    </div>
-                                </div>
+                <div class="col-lg-6" height="300px">
+                    <div class="au-card au-card-top-countries" height="100%">
+                            <h3 class="title-3 m-b-30">Oficinas</h3>
+                            <div class="table-responsive">
+                                <table class="table table-top-campaign">
+                                    <tbody>
+                                        {% for oficina in form.oficinas %}
+                                        <tr>
+                                            <td>{{ oficina.nome }}</td>
+                                            <td>{{ oficina.total_alunos }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="recent-report__chart">
-                                <canvas id="recent-rep-chart"></canvas>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -132,4 +97,63 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+// Percent Chart
+var ctx = document.getElementById("percent-chart");
+if (ctx) {
+    ctx.height = 300;
+    var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        datasets: [
+        {
+            label: "My First dataset",
+            data: [{{form.total_alunos_masc}}, {{form.total_alunos_fem}}],
+            backgroundColor: [
+            '#00b5e9',
+            '#fa4251'
+            ],
+            hoverBackgroundColor: [
+            '#00b5e9',
+            '#fa4251'
+            ],
+            borderWidth: [
+            0, 0
+            ],
+            hoverBorderColor: [
+            'transparent',
+            'transparent'
+            ]
+        }
+        ],
+        labels: [
+        'Masculino',
+        'Feminino'
+        ]
+    },
+    options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        cutoutPercentage: 55,
+        animation: {
+        animateScale: true,
+        animateRotate: true
+        },
+        legend: {
+        display: false
+        },
+        tooltips: {
+        titleFontFamily: "Poppins",
+        xPadding: 15,
+        yPadding: 10,
+        caretPadding: 0,
+        bodyFontSize: 16
+        }
+    }
+    });
+}
+</script>
 {% endblock %}

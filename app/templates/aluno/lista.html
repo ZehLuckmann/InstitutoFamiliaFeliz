@@ -10,7 +10,12 @@
                     <h3 class="title-5 m-b-35">Alunos</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
-                            <input class="form-control" id="table_filter" type="text" placeholder="Search..">   
+                            <div class="input-group">
+                                <input type="text" id="table_filter" name="table_filter" class="form-control" placeholder="Pesquisar..">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                            </div>
                         </div>
                         <div class="table-data__tool-right">
                             <a href="{{ url_for('aluno.cadastrar') }}">
@@ -55,6 +60,9 @@
                                     <td>{{ aluno.cpf }}</td>
                                     <td>
                                         <div class="table-data-feature">
+                                            <a href="/aluno/boletim/{{ aluno.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Boletim"><i class="fas fa-certificate"></i></button>
+                                            </a>
                                             <a href="/aluno/atualizar/{{ aluno.id }}">
                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></button>
                                             </a>

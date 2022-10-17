@@ -47,7 +47,7 @@
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="{{ url_for('home.home') }}">
-                            <img src="{{ url_for('static', filename='images/icon/logo.png') }}" alt="Instituto Familia Feliz" />
+                            <img src="" alt="Instituto Familia Feliz" />
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -64,21 +64,39 @@
                             <a href="{{ url_for('home.home') }}">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                         </li>
-                        <li>
-                            <a href="{{ url_for('aluno.lista') }}">
-                                <i class="fas fa-user"></i>Alunos</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('usuario.lista') }}">
-                                <i class="fas fa-users"></i>Usuários</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('oficina.lista') }}">
-                                <i class="fas fa-gear"></i>Oficinas</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('livro.lista') }}">
-                                <i class="fas fa-book"></i>Livros</a>
+                        {% if current_user.permissao("coordenador") %}
+                            <li>
+                                <a href="{{ url_for('usuario.lista') }}">
+                                    <i class="fas fa-users"></i>Usuários</a>
+                            </li>
+                        {% endif %}
+                        {% if current_user.permissao("coordenador") %}
+                            <li>
+                                <a href="{{ url_for('aluno.lista') }}">
+                                    <i class="fas fa-user"></i>Alunos</a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('livro.lista') }}">
+                                    <i class="fas fa-book"></i>Livros</a>
+                            </li>
+                        {% endif %}
+                        {% if current_user.permissao("responsavel") %}
+                            <li>
+                                <a href="{{ url_for('oficina.lista') }}">
+                                    <i class="fas fa-rocket"></i>Oficinas</a>
+                            </li>
+                        {% endif %}
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-house"></i>{{ current_user.nome }}</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="/usuario/atualizar/{{ current_user.id }}">Conta</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('usuario.logout') }}">Logout</a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -100,22 +118,29 @@
                             <a href="{{ url_for('home.home') }}">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                         </li>
+                        {% if current_user.permissao("coordenador") %}
+                        <li>
+                            <a href="{{ url_for('usuario.lista') }}">
+                                <i class="fas fa-users"></i>Usuários</a>
+                        </li>
+                        {% endif %}
+                        {% if current_user.permissao("coordenador") %}
                         <li>
                             <a href="{{ url_for('aluno.lista') }}">
                                 <i class="fas fa-user"></i>Alunos</a>
                         </li>
                         <li>
-                            <a href="{{ url_for('usuario.lista') }}">
-                                <i class="fas fa-users"></i>Usuários</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('oficina.lista') }}">
-                                <i class="fas fa-gear"></i>Oficinas</a>
-                        </li>
-                        <li>
                             <a href="{{ url_for('livro.lista') }}">
                                 <i class="fas fa-book"></i>Livros</a>
                         </li>
+                        {% endif %}
+                        {% if current_user.permissao("responsavel") %}
+                        <li>
+                            <a href="{{ url_for('oficina.lista') }}">
+                                <i class="fas fa-rocket"></i>Oficinas</a>
+                        </li>
+                        {% endif %}
+
                     </ul>
                 </nav>
             </div>
@@ -125,9 +150,9 @@
         <!-- PAGE CONTAINER-->
         <div class="page-container">
             <!-- HEADER DESKTOP-->
-            <header class="header-desktop">
-                <div class="section__content section__content--p30">
-                    <div class="container-fluid">
+            <header class="header-desktop d-none">
+                <div class="section__content  section__content--p30">
+                    <div class="container-fluid ">
                         <div class="header-wrap">
                             <form class="form-header" action="" method="POST">
                                
