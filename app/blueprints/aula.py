@@ -46,7 +46,15 @@ def lista(oficinaid=-1):
     if not current_user.permissao("responsavel"):
         return redirect(url_for("usuario.acesso_negado"))
 
-    aulas = Aula.query.all()
+    aulas = Aula.query
+    if oficinaid != -1:
+        aulas = aulas.filter_by(oficina_id=oficinaid)
+    if current_user.role=="responsavel":
+        oficinas = [r.id for r in Oficina.query.filter_by(responsavel_id=current_user.id).all()]
+        print(oficinas)
+        aulas = aulas.filter(Aula.oficina_id.in_(oficinas))
+    aulas = aulas.order_by(Aula.data.desc()).all()
+
     return render_template("aula/lista.html", aulas=aulas)
 
 

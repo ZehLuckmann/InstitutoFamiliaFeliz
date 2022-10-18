@@ -8,6 +8,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Oficinas</h3>
+                    <div class="au-breadcrumb-content">
+                        <div class="au-breadcrumb-left">
+                            <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                <li class="list-inline-item active">
+                                    <a href="{{ url_for('home.home') }}">Home</a>
+                                </li>
+                                <li class="list-inline-item seprate">
+                                    <span>/</span>
+                                </li>
+                                <li class="list-inline-item">Oficinas</li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
                             <div class="input-group">
@@ -29,20 +42,14 @@
                                 <i class="fas fa-calendar"></i>Calendário</button>
                             </a>
                             <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
-                                <select class="js-select2" name="type">
-                                    <option selected="selected">Export</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
+                                <button id="btn-export" class="au-btn au-btn-icon au-btn--blue au-btn--small">Exportar</button>
                             </div>
                         </div>
                     </div>
                     <div class="table-responsive table-responsive-data2">
-                        <table class="table table-data2">
+                        <table id="myTable" class="table table-data2">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Nome</th>
                                     <th>Data Inicio</th>
                                     <th>Data Fim</th>
@@ -52,26 +59,25 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="myTable">
+                            <tbody >
                                 {% for oficina in oficinas %}
                                 <tr class="tr-shadow">
-                                    <td>{{ oficina.id }}</td>
                                     <td class="desc">{{ oficina.nome }}</td>
                                     <td>{{ oficina.inicio.strftime("%d/%m/%Y") }}</td>
                                     <td>{{ oficina.fim.strftime("%d/%m/%Y") }}</td>
                                     <td>{{ oficina.dia_semana_str }}</td>
                                     <td>{{ oficina.horario }}</td>
                                     <td>{{ oficina.total_alunos }}</td>
-                                    <td>
+                                    <td class="text-left">
                                         <div class="table-data-feature">
-                                            <a href="/oficina/boletim/{{ oficina.id }}">
-                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Boletim"><i class="fas fa-certificate"></i></button>
+                                            <a href="/oficina/matricula/{{ oficina.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Matricula"><i class="fas  fa-users"></i></button>
                                             </a>
                                             <a href="/aula/lista/{{ oficina.id }}">
                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Aulas"><i class="fas fa-graduation-cap"></i></button>
                                             </a>
-                                            <a href="/oficina/matricula/{{ oficina.id }}">
-                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Matricula"><i class="fas fa-users"></i></button>
+                                            <a href="/oficina/boletim/{{ oficina.id }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Boletim"><i class="fas fa-certificate"></i></button>
                                             </a>
                                             {% if current_user.permissao("coordenador")%}
                                             <a href="/oficina/atualizar/{{ oficina.id }}">
@@ -84,7 +90,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="spacer"></tr>
+                                <tr class="spacer noExl"></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -99,12 +105,28 @@
 {% block script %}
 <script>
     $(document).ready(function(){
-      $("#table_filter").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        $("#table_filter").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
         });
-      });
+
+    $("#btn-export").click(function(e){
+        var table = $("#myTable");
+        if(table && table.length){
+        $(table).table2excel({
+            exclude: ".noExl",
+            name: "Oficinas",
+            filename: "Oficinas" + new Date().toISOString().replace(/[\-\:\.]/g, "") ,
+            fileext: ".xlsx",
+            exclude_img: true,
+            exclude_links: true,
+            exclude_inputs: true,
+            preserveColors: false
+        });
+        }
     });
+});
 </script>
 {% endblock %}

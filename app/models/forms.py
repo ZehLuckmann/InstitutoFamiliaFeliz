@@ -4,9 +4,10 @@ from wtforms.validators import DataRequired, Optional
 
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from datetime import datetime
-from app.models.utils import DIAS_SEMANA, CSS_CLASS_FIELD, GENERO, ROLES
-from app.models.tables import Aluno, Aula, Oficina
+from app.models.utils import DIAS_SEMANA, CSS_CLASS_FIELD, GENERO, ROLES, inicio_semestre_atual, fim_semestre_atual
+from app.models.tables import Aluno, Aula, Oficina, Livro
 
+ 
 
 class CadastroAlunoForm(FlaskForm):
     nome = StringField("Nome:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
@@ -59,8 +60,8 @@ class CadastroLivroForm(FlaskForm):
 class CadastroEmprestimoLivroForm(FlaskForm):
     data_emprestimo = DateField("Data Emprestimo:", validators=[DataRequired()], format='%d/%m/%Y', default=datetime.now(), render_kw={'class': CSS_CLASS_FIELD})
     data_devolucao = DateField("Data Devoluçãos:", validators=[Optional(strip_whitespace=True)], format='%d/%m/%Y', render_kw={'class': CSS_CLASS_FIELD})
-    aluno = SelectField('Aluno',choices=[], coerce=int, validators=[], render_kw={'class': CSS_CLASS_FIELD + " datepicker"})
-    livro = SelectField('Livro',choices=[], coerce=int, validators=[], render_kw={'class': CSS_CLASS_FIELD + " datepicker"})
+    aluno = SelectField('Aluno',choices=[], coerce=int, validators=[], render_kw={'class': CSS_CLASS_FIELD + " select2"})
+    livro = SelectField('Livro',choices=[], coerce=int, validators=[], render_kw={'class': CSS_CLASS_FIELD + " select2"})
     
     def insert_data(self, emprestimo_livro):
         self.data_emprestimo.data = emprestimo_livro.data_emprestimo
@@ -70,8 +71,8 @@ class CadastroEmprestimoLivroForm(FlaskForm):
 
 class CadastroOficinaForm(FlaskForm):
     nome = StringField("Nome:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    inicio = DateField("Data Inicio:", validators=[DataRequired()], format='%d/%m/%Y', default=datetime.now(), render_kw={'class': CSS_CLASS_FIELD})
-    fim = DateField("Data Fim:", validators=[DataRequired()], format='%d/%m/%Y', default=datetime.now(), render_kw={'class': CSS_CLASS_FIELD})
+    inicio = DateField("Data Inicio:", validators=[DataRequired()], format='%d/%m/%Y', default=inicio_semestre_atual(), render_kw={'class': CSS_CLASS_FIELD})
+    fim = DateField("Data Fim:", validators=[DataRequired()], format='%d/%m/%Y', default=fim_semestre_atual(), render_kw={'class': CSS_CLASS_FIELD})
     dia_semana = SelectField("Dia da Semana:", choices=DIAS_SEMANA, validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
     horario = TimeField("Horario:", format='%H:%M', validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
     responsavel = SelectField('Responsavel:',choices=[], coerce=int, render_kw={'class': CSS_CLASS_FIELD})
@@ -133,8 +134,10 @@ class DashboardGeralForm(FlaskForm):
         self.total_alunos = Aluno.query.count()
         self.total_oficinas = Oficina.query.count()
         self.total_aulas = Aula.query.count()
+        self.total_livros = Livro.query.count()
 
         self.total_alunos_masc = Aluno.query.filter_by(genero="masc").count()
         self.total_alunos_fem = Aluno.query.filter_by(genero="fem").count()
 
         self.oficinas = Oficina.query.all()
+        

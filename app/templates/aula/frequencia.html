@@ -6,6 +6,27 @@
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="row">
+                <div class="au-breadcrumb-content">
+                    <div class="au-breadcrumb-left">
+                        <ul class="list-unstyled list-inline au-breadcrumb__list">
+                            <li class="list-inline-item active">
+                                <a href="{{ url_for('home.home') }}">Home</a>
+                            </li>
+                            <li class="list-inline-item seprate">
+                                <span>/</span>
+                            </li>
+                            <li class="list-inline-item active">
+                                <a href="{{ url_for('aula.lista') }}">Aulas</a>
+                            </li>
+                            <li class="list-inline-item seprate">
+                                <span>/</span>
+                            </li>
+                            <li class="list-inline-item">Frequência</li>
+                        </ul>
+                    </div>
+                </div>   
+            </div>
+            <div class="row">
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Frequencia</h3>
                     <div class="table-data__tool">
@@ -22,21 +43,12 @@
                                 <button class="au-btn au-btn-icon au-btn--green au-btn--small">
                                 <i class="fas fa-plus"></i>Nova Aula</button>
                             </a>-->
-                            <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
-                                <select class="js-select2" name="type">
-                                    <option selected="selected">Export</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
                         </div>
                     </div>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Aula</th>
                                     <th>Data</th>
                                     <th>Aluno</th>
@@ -47,7 +59,6 @@
                             <tbody id="myTable">
                                 {% for frequencia in frequencias %}
                                 <tr class="tr-shadow">
-                                    <td>{{ frequencia.id }}</td>
                                     <td>{{ frequencia.aula.oficina.nome }}</td>
                                     <td>{{ frequencia.aula.data.strftime("%d/%m/%Y") }}</td>
                                     <td>{{ frequencia.aluno.nome }}</td>

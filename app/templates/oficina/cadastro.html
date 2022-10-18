@@ -7,13 +7,32 @@
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
+            <div class="au-breadcrumb-content">
+                <div class="au-breadcrumb-left">
+                    <ul class="list-unstyled list-inline au-breadcrumb__list">
+                        <li class="list-inline-item active">
+                            <a href="{{ url_for('home.home') }}">Home</a>
+                        </li>
+                        <li class="list-inline-item seprate">
+                            <span>/</span>
+                        </li>
+                        <li class="list-inline-item active">
+                            <a href="{{ url_for('oficina.lista') }}">Oficinas</a>
+                        </li>
+                        <li class="list-inline-item seprate">
+                            <span>/</span>
+                        </li>
+                        <li class="list-inline-item">Cadastro</li>
+                    </ul>
+                </div>
+            </div>
             <div class="row">
                 <section class="container-center">
                     <form action="{{ action }}" method="post" novalidate="novalidate">
                     {{ form.csrf_token }}
                         <div class="card">
                             <div class="card-header">
-                                <h1>Cadastrar Oficina</h1>
+                                <h1>Oficina</h1>
                             </div>
                             <div class="card-body card-block">
                                 <div class="row form-group">

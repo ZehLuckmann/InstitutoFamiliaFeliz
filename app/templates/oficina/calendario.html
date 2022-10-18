@@ -17,6 +17,26 @@
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
+            <div class = "row">
+              <div class="au-breadcrumb-content">
+                <div class="au-breadcrumb-left">
+                    <ul class="list-unstyled list-inline au-breadcrumb__list">
+                        <li class="list-inline-item active">
+                            <a href="{{ url_for('home.home') }}">Home</a>
+                        </li>
+                        <li class="list-inline-item seprate">
+                            <span>/</span>
+                        </li>
+                        <li class="list-inline-item active">
+                            <a href="{{ url_for('oficina.lista') }}">Oficinas</a>
+                        </li>
+                        <li class="list-inline-item seprate">
+                            <span>/</span>
+                        </li>
+                        <li class="list-inline-item">Calendário</li>
+                    </ul>
+                </div>
+            </div>
             <div class="row m-t-25">
                 <div class="h-100">
                   <div class="au-card">
@@ -67,6 +87,7 @@
           center: 'title',
           right: 'month,agendaWeek,agendaDay,listWeek'
         },
+        height: "auto",
         events: events
       });
     });

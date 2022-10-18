@@ -6,6 +6,27 @@
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="row">
+                <div class="au-breadcrumb-content">
+                    <div class="au-breadcrumb-left">
+                        <ul class="list-unstyled list-inline au-breadcrumb__list">
+                            <li class="list-inline-item active">
+                                <a href="{{ url_for('home.home') }}">Home</a>
+                            </li>
+                            <li class="list-inline-item seprate">
+                                <span>/</span>
+                            </li>
+                            <li class="list-inline-item active">
+                                <a href="{{ url_for('oficina.lista') }}">Oficinas</a>
+                            </li>
+                            <li class="list-inline-item seprate">
+                                <span>/</span>
+                            </li>
+                            <li class="list-inline-item">Matrícula</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12"> 
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">

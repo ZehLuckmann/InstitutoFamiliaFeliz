@@ -3311,6 +3311,7 @@ section {
     padding: 40px;
     padding-top: 25px;
     padding-bottom: 29px;
+    max-height: 90%;
     min-height: 90%;
 }
 
@@ -4623,9 +4624,9 @@ section {
 }
 
 .table-data-feature .item {
-    display: block;
-    height: 30px;
-    width: 30px;
+    display: inline;
+    height: 35px;
+    width: 35px;
     position: relative;
     -webkit-border-radius: 100%;
     -moz-border-radius: 100%;

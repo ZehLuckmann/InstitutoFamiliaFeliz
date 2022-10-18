@@ -35,7 +35,7 @@ def lista():
     if not current_user.permissao("coordenador"):
         return redirect(url_for("usuario.acesso_negado"))
 
-    usuarios = Usuario.query.all()
+    usuarios = Usuario.query.filter(Usuario.login!="admin").all()
     return render_template("usuario/lista.html", usuarios=usuarios)
 
 

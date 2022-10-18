@@ -73,7 +73,7 @@ def emprestimo(livroid=-1):
 
     form = CadastroEmprestimoLivroForm()
     
-    form.aluno.choices = [(aluno.id, aluno.nome) for aluno in Aluno.query.all()]
+    form.aluno.choices = [(aluno.id, f"{aluno.id} - {aluno.nome} {aluno.sobrenome}") for aluno in Aluno.query.all()]
     form.livro.choices = [(livro.id, livro.nome) for livro in Livro.query.all()]
 
     if form.validate_on_submit():
@@ -97,7 +97,7 @@ def devolucao(id):
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroEmprestimoLivroForm()
-    form.aluno.choices = [(aluno.id, aluno.nome) for aluno in Aluno.query.all()]
+    form.aluno.choices = [(aluno.id, f"{aluno.id} - {aluno.nome} {aluno.sobrenome}") for aluno in Aluno.query.all()]
     form.livro.choices = [(livro.id, livro.nome) for livro in Livro.query.all()]
     
     emprestimo_livro = EmprestimoLivro.query.filter_by(id=id).first()

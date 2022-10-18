@@ -116,7 +116,10 @@ class Oficina(db.Model):
     def total_alunos(self):
         return len(self.alunos)
 
-    
+    @property
+    def total_aulas(self):
+        return len(self.aula)
+
     @property
     def datas_futuras(self):
         datas = []

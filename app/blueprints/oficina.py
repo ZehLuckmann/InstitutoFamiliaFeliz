@@ -14,7 +14,7 @@ def cadastrar():
         return redirect(url_for("usuario.acesso_negado"))
 
     form = CadastroOficinaForm()
-    form.responsavel.choices = [(usuario.id, usuario.nome) for usuario in Usuario.query.all()]
+    form.responsavel.choices = [(usuario.id, usuario.nome) for usuario in Usuario.query.filter(Usuario.login!="admin").all()]
     if form.validate_on_submit():
         oficina = Oficina()
         oficina = form.populate_obj(oficina)

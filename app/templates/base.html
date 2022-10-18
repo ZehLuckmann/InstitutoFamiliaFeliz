@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <!-- Required meta tags-->
@@ -8,10 +8,11 @@
     <meta name="description" content="Instituto Familia Feliz">
     <meta name="author" content="José Henrique Luckmann">
     <meta name="keywords" content="">
-
+    
     <!-- Title Page-->
     <title>Instituto Familia Feliz</title>
-
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/icon/favicon.png') }}">
+    
     <!-- Fontfaces CSS-->
     <link href="{{ url_for('static', filename='css/font-face.css') }}" rel="stylesheet" media="all">
     <link href="{{ url_for('static', filename='vendor/font-awesome-4.7/css/font-awesome.min.css') }}" rel="stylesheet" media="all">
@@ -23,17 +24,12 @@
 
     <!-- Vendor CSS-->
     <link href="{{ url_for('static', filename='vendor/animsition/animsition.min.css') }}" rel="stylesheet" media="all">
-    <link href="{{ url_for('static', filename='vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet" media="all">
-    <link href="{{ url_for('static', filename='vendor/wow/animate.css') }}" rel="stylesheet" media="all">
     <link href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}" rel="stylesheet" media="all">
-    <link href="{{ url_for('static', filename='vendor/slick/slick.css') }}" rel="stylesheet" media="all">
-    <link href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}" rel="stylesheet" media="all">
-    <link href="{{ url_for('static', filename='vendor/perfect-scrollbar/perfect-scrollbar.css') }}" rel="stylesheet" media="all">
-
+    <link href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}" rel="stylesheet" media="all">   
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.1/dist/bootstrap-table.min.css">
     <!-- Main CSS-->
     <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet" media="all">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.1/dist/bootstrap-table.min.css">
-
+    
     {% block links %}
     {% endblock %}
 
@@ -84,6 +80,10 @@
                             <li>
                                 <a href="{{ url_for('oficina.lista') }}">
                                     <i class="fas fa-rocket"></i>Oficinas</a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('aula.lista') }}">
+                                    <i class="fas fa-graduation-cap"></i>Aulas</a>
                             </li>
                         {% endif %}
                         <li class="has-sub">
@@ -139,6 +139,10 @@
                             <a href="{{ url_for('oficina.lista') }}">
                                 <i class="fas fa-rocket"></i>Oficinas</a>
                         </li>
+                        <li>
+                            <a href="{{ url_for('aula.lista') }}">
+                                <i class="fas fa-graduation-cap"></i>Aulas</a>
+                        </li>
                         {% endif %}
 
                     </ul>
@@ -150,7 +154,7 @@
         <!-- PAGE CONTAINER-->
         <div class="page-container">
             <!-- HEADER DESKTOP-->
-            <header class="header-desktop d-none">
+            <header class="header-desktop d-none d-lg-block">
                 <div class="section__content  section__content--p30">
                     <div class="container-fluid ">
                         <div class="header-wrap">
@@ -211,31 +215,24 @@
     <script src="{{ url_for('static', filename='vendor/bootstrap-4.1/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap-4.1/bootstrap.min.js') }}"></script>
     <!-- Vendor JS       -->
-    <script src="{{ url_for('static', filename='vendor/slick/slick.min.js') }}">
-    </script>
-    <script src="{{ url_for('static', filename='vendor/wow/wow.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/animsition/animsition.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/bootstrap-progressbar/bootstrap-progressbar.min.js') }}">
-    </script>
-    <script src="{{ url_for('static', filename='vendor/counter-up/jquery.waypoints.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/counter-up/jquery.counterup.min.js') }}">
-    </script>
-    <script src="{{ url_for('static', filename='vendor/circle-progress/circle-progress.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/chartjs/Chart.bundle.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/select2/select2.min.js') }}">
-    </script>
+    <script src="{{ url_for('static', filename='vendor/select2/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/table2excel.js') }}"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.1/dist/bootstrap-table.min.js"></script>
 
     <!-- Main JS-->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://unpkg.com/bootstrap-table@1.21.1/dist/bootstrap-table.min.js"></script>
-    <!-- Latest compiled and minified Locales -->
-    <script src="https://unpkg.com/bootstrap-table@1.21.1/dist/locale/bootstrap-table-zh-CN.min.js"></script>
-
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
     {% block script %}
     {% endblock %}
+
+
 
 </body>
 

@@ -7,11 +7,35 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="title-5 m-b-35">Boletim Oficina</h3>
+                    <h2 class="title-5 m-b-35">Boletim</h2>
+                    <div class="au-breadcrumb-content">
+                        <div class="au-breadcrumb-left">
+                            <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                <li class="list-inline-item active">
+                                    <a href="{{ url_for('home.home') }}">Home</a>
+                                </li>
+                                <li class="list-inline-item seprate">
+                                    <span>/</span>
+                                </li>
+                                <li class="list-inline-item active">
+                                    <a href="{{ url_for('oficina.lista') }}">Oficinas</a>
+                                </li>
+                                <li class="list-inline-item seprate">
+                                    <span>/</span>
+                                </li>
+                                <li class="list-inline-item">Boletim</li>
+                            </ul>
+                        </div>
+                    </div>
                     <!-- DATA TABLE-->
                     <div class="table-responsive m-b-40">
                         <table class="table table-borderless table-data3">
                             <thead>
+                                <tr>
+                                    <th>Oficina: {{ oficina.nome }}</th>
+                                    <th colspan="2">Responsavel: {{ oficina.responsavel.nome }}</th>
+                                    <th>Aulas:{{oficina.total_aulas}}</th>
+                                </tr>
                                 <tr>
                                     <th>Aluno</th>
                                     <th>Presença</th>
