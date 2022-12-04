@@ -1,6 +1,7 @@
 {% macro render_field(field) %}
+    
     {{ field.label }}
-    {{ field(**kwargs)|safe }}
+    {{ field(class="form-control", **kwargs)|safe }}
     {% if field.errors %}
     <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
        <ul>
@@ -13,4 +14,5 @@
         </button>
     </div>
     {% endif %}
+   
 {% endmacro %}

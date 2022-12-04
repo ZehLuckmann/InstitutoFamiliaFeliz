@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, TimeField, SelectField, PasswordField
+from wtforms import StringField, DateField, TimeField, SelectField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Optional
 
 from flask_wtf.file import FileField, FileRequired, FileAllowed
@@ -10,26 +10,29 @@ from app.models.tables import Aluno, Aula, Oficina, Livro
  
 
 class CadastroAlunoForm(FlaskForm):
-    nome = StringField("Nome:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    sobrenome = StringField("Sobrenome:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    escola = StringField("Escola:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    ano = StringField("Ano:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    rua = StringField("Rua:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    numero = StringField("Número:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    bairro = StringField("Bairro:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    cidade = StringField("Cidade:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    estado = StringField("Estado:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    fone = StringField("Telefone:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    cpf = StringField("Cpf:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    foto = FileField(validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    genero = SelectField("Gênero:", choices=GENERO, validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})  
-    fone_pai = StringField("Telefone:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    fone_mae = StringField("Telefone:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    pai = StringField("Pai:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
-    mae = StringField("Mãe:", validators=[], render_kw={'class': CSS_CLASS_FIELD})
+    csnpo = StringField("CSNPO:", validators=[])
+    nome = StringField("Nome:", validators=[DataRequired()])
+    sobrenome = StringField("Sobrenome:", validators=[DataRequired()])
+    escola = StringField("Escola:", validators=[])
+    ano = StringField("Ano:", validators=[])
+    rua = StringField("Rua:", validators=[])
+    numero = StringField("Número:", validators=[])
+    bairro = StringField("Bairro:", validators=[])
+    cidade = StringField("Cidade:", validators=[])
+    estado = StringField("Estado:", validators=[])
+    fone = StringField("Telefone:", validators=[])
+    cpf = StringField("Cpf:", validators=[])
+    foto = FileField(validators=[])
+    genero = SelectField("Gênero:", choices=GENERO, validators=[DataRequired()])  
+    fone_pai = StringField("Telefone:", validators=[])
+    fone_mae = StringField("Telefone:", validators=[])
+    pai = StringField("Pai:", validators=[])
+    mae = StringField("Mãe:", validators=[])
+    observacoes = TextAreaField("Observações:", validators=[])
 
     def insert_data(self, aluno):
         self.nome.data = aluno.nome
+        self.csnpo.data = aluno.csnpo
         self.sobrenome.data = aluno.sobrenome
         self.escola.data = aluno.escola
         self.ano.data = aluno.ano
@@ -45,12 +48,13 @@ class CadastroAlunoForm(FlaskForm):
         self.pai.data = aluno.pai
         self.mae.data = aluno.mae
         self.genero.data = aluno.genero
+        self.observacoes.data = aluno.observacoes
 
 
 class CadastroLivroForm(FlaskForm):
-    nome = StringField("Nome:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    codigo = StringField("Código:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    sub_codigo = StringField("Sub Código:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
+    nome = StringField("Nome:", validators=[DataRequired()])
+    codigo = StringField("Código:", validators=[DataRequired()])
+    sub_codigo = StringField("Sub Código:", validators=[DataRequired()])
     
     def insert_data(self, livro):
         self.nome.data = livro.nome
@@ -58,10 +62,10 @@ class CadastroLivroForm(FlaskForm):
         self.sub_codigo.data = livro.sub_codigo
 
 class CadastroEmprestimoLivroForm(FlaskForm):
-    data_emprestimo = DateField("Data Emprestimo:", validators=[DataRequired()], format='%d/%m/%Y', default=datetime.now(), render_kw={'class': CSS_CLASS_FIELD})
-    data_devolucao = DateField("Data Devoluçãos:", validators=[Optional(strip_whitespace=True)], format='%d/%m/%Y', render_kw={'class': CSS_CLASS_FIELD})
-    aluno = SelectField('Aluno',choices=[], coerce=int, validators=[], render_kw={'class': CSS_CLASS_FIELD + " select2"})
-    livro = SelectField('Livro',choices=[], coerce=int, validators=[], render_kw={'class': CSS_CLASS_FIELD + " select2"})
+    data_emprestimo = DateField("Data Emprestimo:", validators=[DataRequired()], format='%d/%m/%Y', default=datetime.now())
+    data_devolucao = DateField("Data Devoluçãos:", validators=[Optional(strip_whitespace=True)], format='%d/%m/%Y')
+    aluno = SelectField('Aluno:',choices=[], coerce=int, validators=[], render_kw={'class': CSS_CLASS_FIELD + " select2"})
+    livro = SelectField('Livro:',choices=[], coerce=int, validators=[], render_kw={'class': CSS_CLASS_FIELD + " select2"})
     
     def insert_data(self, emprestimo_livro):
         self.data_emprestimo.data = emprestimo_livro.data_emprestimo
@@ -70,12 +74,12 @@ class CadastroEmprestimoLivroForm(FlaskForm):
         self.livro.data = emprestimo_livro.livro_id
 
 class CadastroOficinaForm(FlaskForm):
-    nome = StringField("Nome:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    inicio = DateField("Data Inicio:", validators=[DataRequired()], format='%d/%m/%Y', default=inicio_semestre_atual(), render_kw={'class': CSS_CLASS_FIELD})
-    fim = DateField("Data Fim:", validators=[DataRequired()], format='%d/%m/%Y', default=fim_semestre_atual(), render_kw={'class': CSS_CLASS_FIELD})
-    dia_semana = SelectField("Dia da Semana:", choices=DIAS_SEMANA, validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    horario = TimeField("Horario:", format='%H:%M', validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    responsavel = SelectField('Responsavel:',choices=[], coerce=int, render_kw={'class': CSS_CLASS_FIELD})
+    nome = StringField("Nome:", validators=[DataRequired()])
+    inicio = DateField("Data Inicio:", validators=[DataRequired()], format='%d/%m/%Y', default=inicio_semestre_atual())
+    fim = DateField("Data Fim:", validators=[DataRequired()], format='%d/%m/%Y', default=fim_semestre_atual())
+    dia_semana = SelectField("Dia da Semana:", choices=DIAS_SEMANA, validators=[DataRequired()])
+    horario = TimeField("Horario:", format='%H:%M', validators=[DataRequired()])
+    responsavel = SelectField('Responsavel:',choices=[], coerce=int)
 
     def insert_data(self, oficina):
         self.nome.data = oficina.nome
@@ -95,9 +99,10 @@ class CadastroOficinaForm(FlaskForm):
         return oficina
 
 class CadastroAulaForm(FlaskForm):
-    data = DateField("Data Inicio:", validators=[DataRequired()], format='%d/%m/%Y', default=datetime.now(), render_kw={'class': CSS_CLASS_FIELD})
-    oficina = SelectField('Oficina',choices=[], coerce=int, render_kw={'class': CSS_CLASS_FIELD})
-    horario = TimeField("Horario:", format='%H:%M', validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
+    data = DateField("Data Inicio:", validators=[DataRequired()], format='%d/%m/%Y', default=datetime.now())
+    oficina = SelectField('Oficina:',choices=[], coerce=int)
+    horario = TimeField("Horario:", format='%H:%M', validators=[DataRequired()])
+    plano_aula = TextAreaField("Plano de aula:", validators=[])
     
     def insert_data(self, aula):
         self.data.data = aula.data
@@ -108,13 +113,14 @@ class CadastroAulaForm(FlaskForm):
         aula.data = self.data.data
         aula.oficina_id = self.oficina.data
         aula.horario = self.horario.data
+        aula.plano_aula = self.plano_aula.data
         return aula
 
 class CadastroUsuarioForm(FlaskForm):
-    nome = StringField("Nome:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    login = StringField("Login:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    senha = PasswordField("Senha:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    role = SelectField("Cargo:", choices=ROLES, validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
+    nome = StringField("Nome:", validators=[DataRequired()])
+    login = StringField("Login:", validators=[DataRequired()])
+    senha = PasswordField("Senha:", validators=[DataRequired()])
+    role = SelectField("Cargo:", choices=ROLES, validators=[DataRequired()])
     foto = FileField(validators=[])
     
     def insert_data(self, usuario):
@@ -124,8 +130,8 @@ class CadastroUsuarioForm(FlaskForm):
         self.role.data = usuario.role
 
 class LoginForm(FlaskForm):
-    login = StringField("Login:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
-    senha = PasswordField("Senha:", validators=[DataRequired()], render_kw={'class': CSS_CLASS_FIELD})
+    login = StringField("Login:", validators=[DataRequired()])
+    senha = PasswordField("Senha:", validators=[DataRequired()])
 
 
 class DashboardGeralForm(FlaskForm):

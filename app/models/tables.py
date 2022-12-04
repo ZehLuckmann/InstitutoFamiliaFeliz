@@ -12,6 +12,7 @@ from sqlalchemy.orm.session import object_session
 class Aluno(db.Model):
     __tablename__ = "aluno"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    csnpo = db.Column(db.String)
     nome = db.Column(db.String)
     sobrenome = db.Column(db.String)
     genero = db.Column(db.String)
@@ -29,6 +30,7 @@ class Aluno(db.Model):
     mae = db.Column(db.String)
     fone_pai = db.Column(db.String)
     fone_mae = db.Column(db.String)
+    observacoes = db.Column(db.String)
 
      
     def calcula_presenca(self, oficina_id):
@@ -136,6 +138,8 @@ class Aula(db.Model):
     oficina_id = db.Column(db.Integer, db.ForeignKey('oficina.id'))
     data = db.Column(db.Date)
     horario = db.Column(db.Time)
+    plano_aula = db.Column(db.String)
+
 
     @property
     def data_iso(self):
